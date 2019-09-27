@@ -8,6 +8,7 @@ import SelectPDF from "./templates/selectPDF.vue";
 
 /** urlのパスにあたる文言 */
 export enum RoutePath {
+    ROOT = "/",
     SELECT = "/select",
     RESULT = "/result",
     NOTFOUND = "/*"
@@ -30,6 +31,7 @@ function init() {
 
     /** コンポーネントのルートを設定 */
     const routes: RouteConfig[] = [
+        { path: RoutePath.ROOT, component: SelectPDF },
         { path: RoutePath.SELECT, component: SelectPDF },
         { path: RoutePath.RESULT, component: Result },
         { path: RoutePath.NOTFOUND, component: NotFound },
