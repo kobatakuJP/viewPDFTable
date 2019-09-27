@@ -1,73 +1,64 @@
-const path = require('path');
-const webpack = require('webpack');
-
-/*
- * SplitChunksPlugin is enabled by default and replaced
- * deprecated CommonsChunkPlugin. It automatically identifies modules which
- * should be splitted of chunk by heuristics using module duplication count and
- * module category (i. e. node_modules). And splits the chunks…
- *
- * It is safe to remove "splitChunks" from the generated configuration
- * and was added as an educational example.
- *
- * https://webpack.js.org/plugins/split-chunks-plugin/
- *
- */
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-/*
- * We've enabled HtmlWebpackPlugin for you! This generates a html
- * page for you when you compile webpack, which will make you start
- * developing and prototyping faster.
- *
- * https://github.com/jantimon/html-webpack-plugin
- *
- */
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
-	mode: 'development',
-	entry: './src/main2.ts',
+  mode: 'development',
+  entry: './src/main2.ts',
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  resolve: {
+    alias: {
+      vue$: 'vue/dist/vue.esm.js' // https://jp.vuejs.org/v2/guide/installation.html#%E3%83%A9%E3%83%B3%E3%82%BF%E3%82%A4%E3%83%A0-%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%A9%E3%81%A8%E3%83%A9%E3%83%B3%E3%82%BF%E3%82%A4%E3%83%A0%E9%99%90%E5%AE%9A%E3%81%AE%E9%81%95%E3%81%84
+    },
+    extensions: ['.tsx', '.ts', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        include: [path.resolve(__dirname, 'src')],
+        use: {
+          loader: 'ts-loader',
+          options: {
+            appendTsSuffixTo: [/\.vue$/]
+          }
+        }
+      },
+      {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      }
+    ]
+  },
 
-	output: {
-		filename: '[name].js',
-		path: path.resolve(__dirname, 'dist')
-	},
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          priority: -10,
+          test: /[\\/]node_modules[\\/]/
+        }
+      },
 
-	plugins: [new webpack.ProgressPlugin(), new HtmlWebpackPlugin()],
+      chunks: 'async',
+      minChunks: 1,
+      minSize: 30000,
+      name: true
+    }
+  },
 
-	module: {
-		rules: [
-			{
-				test: /.(ts|tsx)?$/,
-				loader: 'ts-loader',
-				include: [path.resolve(__dirname, 'src')],
-				exclude: [/node_modules/]
-			}
-		]
-	},
+  devServer: {
+    open: true
+  },
 
-	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
-			},
-
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: true
-		}
-	},
-
-	devServer: {
-		open: true
-	},
-
-	resolve: {
-		extensions: ['.tsx', '.ts', '.js']
-	}
-};
+  plugins: [
+    new webpack.ProgressPlugin(),
+    new HtmlWebpackPlugin({ title: 'PDF to Table' }),
+    new VueLoaderPlugin()
+  ]
+}
