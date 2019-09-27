@@ -1,11 +1,15 @@
-<template></template>
+<template>
+  <div>
+    result
+  </div>
+</template>
 
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
 
 @Component({})
-export default class Table extends Vue {}
+export default class Result extends Vue {}
 </script>
 
 <style scoped>

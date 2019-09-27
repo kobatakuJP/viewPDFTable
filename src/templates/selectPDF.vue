@@ -19,8 +19,10 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-@Component
-export default class SelectPDF extends Vue {}
+@Component({})
+export default class SelectPDF extends Vue {
+
+}
 </script>
 
 <style scoped>
