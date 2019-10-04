@@ -24,12 +24,17 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { pdf_table_extractor_from_path } from "@kobataku/pdf-table-extractor";
+import { pdfDataFromFile, RoutePath } from "../main2";
 
 @Component({})
 export default class SelectPDF extends Vue {
   readonly FILE_UPLOADER_ID = "file_upload";
   async updateFile(e: Event) {
-    const files = (document.getElementById(this.FILE_UPLOADER_ID) as HTMLInputElement).files;
+    const file = (document.getElementById(
+      this.FILE_UPLOADER_ID
+    ) as HTMLInputElement).files[0];
+    const pdfData = await pdfDataFromFile(file);
+    this.$router.push(RoutePath.RESULT);
   }
 }
 </script>
