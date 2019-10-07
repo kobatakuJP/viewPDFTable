@@ -19,6 +19,10 @@ module.exports = {
   module: {
     rules: [
       {
+          test: /\.css$/,
+          use: ['style-loader', { loader: 'css-loader'/*, options: { url: false }*/ }]
+      },
+      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         include: [path.resolve(__dirname, 'src')],
