@@ -64,11 +64,16 @@ export default class SelectPDF extends Vue {
     return result;
   }
   async updateFile(e: Event) {
+    this.resetTable();
     const file = (document.getElementById(
       this.FILE_UPLOADER_ID
     ) as HTMLInputElement).files[0];
     this.pdfData = await pdfDataFromFile(file);
     this.updateTable();
+  }
+  resetTable() {
+    this.headings.splice(0);
+    this.records.splice(0);
   }
   updateTable() {
     this.updateColumns();
@@ -78,15 +83,37 @@ export default class SelectPDF extends Vue {
   private updateColumns() {
     if (this.isTableData()) {
       // データ在りの場合はヘッダを更新
-      this.headings.splice(
-        0,
-        this.headings.length,
-        ...this.objToArray(this.pdfData.pageTables[0].tables[0])
-      );
+      const header = this.choiseHeader();
+      this.headings.splice(0, this.headings.length, ...header);
     } else {
       // データなしの場合は何もなし
       this.headings.splice(0);
     }
+  }
+  /** ヘッダを選択する */
+  private choiseHeader(): string[] {
+    const tables = this.objToArray(this.pdfData.pageTables[0].tables);
+    let result = this.objToArray(tables[0]); // 見つからない場合は最初を返しとくため
+    /** ヘッダじゃないのに上にあるデータは消すので、その数を数えておく */
+    let outDataNum = 0;
+    for (let i = 0, l = tables.length; i < l; i++) {
+      const c = this.objToArray(tables[i]);
+      if (c.filter(v => v === "").length > c.length / 2) {
+        // 半分以上空文字だとさすがにおかしいのでこれをヘッダにはしない。
+        outDataNum++;
+        continue;
+      } else {
+        // ヘッダっぽいので返す
+        result = c;
+        break;
+      }
+    }
+    if (outDataNum > 0) {
+      tables.splice(0, outDataNum);
+      this.pdfData.pageTables[0].tables = {}; // 一回消す
+      tables.map((v, i) => (this.pdfData.pageTables[0].tables[i] = v)); // mapでforEachみたいなことしとる
+    }
+    return result;
   }
   /** テーブルデータがあるかどうか */
   private isTableData(): boolean {
