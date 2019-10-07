@@ -1,9 +1,9 @@
 import { pdf_table_extractor_from_path, Result } from "@kobataku/pdf-table-extractor";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+import { ClientTable } from 'vue-tables-2';
 import NotFound from "./templates/404.vue";
 import App from "./templates/App.vue";
-import ResultComponent from "./templates/result.vue";
 import SelectPDF from "./templates/selectPDF.vue";
 
 /** urlのパスにあたる文言 */
@@ -15,6 +15,7 @@ export enum RoutePath {
 }
 
 Vue.use(VueRouter);
+Vue.use(ClientTable);
 
 window.onload = init;
 
@@ -33,7 +34,7 @@ function init() {
     const routes: RouteConfig[] = [
         { path: RoutePath.ROOT, component: SelectPDF },
         { path: RoutePath.SELECT, component: SelectPDF },
-        { path: RoutePath.RESULT, component: ResultComponent },
+        // { path: RoutePath.RESULT, component: ResultComponent },
         { path: RoutePath.NOTFOUND, component: NotFound },
     ]
     const router = new VueRouter({ routes });

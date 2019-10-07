@@ -18,6 +18,9 @@ export default class ResultComponent extends Vue {
     // 最初の1行目をヘッダとする
     const header = source[0];
   }
+  mounted() {
+    console.log(this.table)
+  }
 }
 </script>
 
