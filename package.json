@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "webpack-dev-server"
+    "build": "webpack && npm run version",
+    "start": "webpack-dev-server",
+    "version": "sed -i -e \"s/__SED__HERE__TO__VERSION__STR__/$(git describe --tags --dirty)/g\" dist/index.html"
   },
   "repository": {
     "type": "git",
