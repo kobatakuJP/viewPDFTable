@@ -62,7 +62,7 @@ module.exports = {
 
   plugins: [
     new webpack.ProgressPlugin(),
-    new HtmlWebpackPlugin({ title: 'PDF to Table' }),
+    new HtmlWebpackPlugin({ title: 'PDF to Table', template: 'index.html' }),
     new VueLoaderPlugin()
   ]
 }
