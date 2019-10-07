@@ -17,7 +17,7 @@
         <input type="text" id="url_upload" />
       </label>
     </div>
-    <div>
+    <div v-if="headings.length > 0">
       <v-client-table :columns="columns" :data="records" :options="options"></v-client-table>
     </div>
   </div>
@@ -129,7 +129,8 @@ export default class SelectPDF extends Vue {
     const tmp = this.objToArray(v);
     const result = {};
     for (let i = 0, l = this.columns.length; i < l; i++) {
-      result[this.columns[i]] = tmp[i];
+      // 空文字は全角スペースに置き換える。フィルタが空文字では機能しないので、苦肉の策。
+      result[this.columns[i]] = tmp[i] === "" ? "　" : tmp[i];
     }
     return result;
   }
