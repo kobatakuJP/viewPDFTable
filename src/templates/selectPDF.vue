@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="vpt-theme">
       <label for="file_upload">
         端末からPDFを選ぶ
         <input
@@ -8,13 +8,8 @@
           :id="FILE_UPLOADER_ID"
           accept="application/pdf"
           @change="updateFile"
+          style="display:none"
         />
-      </label>
-    </div>
-    <div>
-      <label for="url_upload">
-        PDFのURLを記載する
-        <input type="text" id="url_upload" />
       </label>
     </div>
     <div v-if="headings.length > 0">
