@@ -1,19 +1,23 @@
 <template>
-  <div>
-    <div class="vpt-theme">
-      <label for="file_upload">
-        端末からPDFを選ぶ
-        <input
-          type="file"
-          :id="FILE_UPLOADER_ID"
-          accept="application/pdf"
-          @change="updateFile"
-          style="display:none"
-        />
-      </label>
-    </div>
-    <div v-if="headings.length > 0">
-      <v-client-table :columns="columns" :data="records" :options="options"></v-client-table>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="vpt-theme">
+          <label for="file_upload">
+            端末からPDFを選ぶ
+            <input
+              type="file"
+              :id="FILE_UPLOADER_ID"
+              accept="application/pdf"
+              @change="updateFile"
+              style="display:none"
+            />
+          </label>
+        </div>
+        <div v-if="headings.length > 0">
+          <v-client-table :columns="columns" :data="records" :options="options"></v-client-table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +46,8 @@ export default class SelectPDF extends Vue {
     return {
       filterByColumn: true,
       headings: this.arrayToRecordObj(this.headings),
-      listColumns: this.listColumns
+      listColumns: this.listColumns,
+      columnsDropdown: true
     };
   }
   get listColumns() {
