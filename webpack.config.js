@@ -5,6 +5,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   mode: 'development',
+  devtool: 'inline-source-map',
   entry: './src/main2.ts',
   output: {
     filename: '[name].js',
