@@ -14,16 +14,9 @@
             />
           </label>
         </div>
-        <b-tabs content-class="mt-3">
-          <b-tab title="First" active>
-            <div v-if="headings.length > 0">
-              <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
-            </div>
-          </b-tab>
-          <b-tab title="Second">
-            <p>I'm the second tab</p>
-          </b-tab>
-        </b-tabs>
+        <div v-if="headings.length > 0">
+          <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
+        </div>
       </div>
     </div>
   </div>
@@ -50,7 +43,7 @@ export default class SelectPDF extends Vue {
     return this.columns.filter(
       (_, i) =>
         //filterIdxに含まれていないインデックスのみの配列を作る
-        this.filterIdx.findIndex((_, ii) => i === ii) === -1
+        this.filterIdx.findIndex(v => i === v) === -1
     );
   }
   records: { [key: string]: string }[] = [];
