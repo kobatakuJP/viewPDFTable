@@ -1,4 +1,7 @@
 import { pdf_table_extractor_from_path, Result } from "@kobataku/pdf-table-extractor";
+import BootstrapVue from 'bootstrap-vue';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import { ClientTable } from 'vue-tables-2';
@@ -16,6 +19,7 @@ export enum RoutePath {
 
 Vue.use(VueRouter);
 Vue.use(ClientTable);
+Vue.use(BootstrapVue)
 
 window.onload = init;
 
