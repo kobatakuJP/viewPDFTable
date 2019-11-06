@@ -3,20 +3,27 @@
     <div class="row">
       <div class="col-md-12">
         <div class="vpt-theme">
-          <label for="file_upload">
+          <label :for="FILE_UPLOADER_ID">
             端末からPDFを選ぶ
             <input
               type="file"
               :id="FILE_UPLOADER_ID"
               accept="application/pdf"
               @change="updateFile"
-              style="display:none"
+              style="width:0;"
             />
           </label>
         </div>
-        <div v-if="headings.length > 0">
-          <v-client-table :columns="columns" :data="records" :options="options"></v-client-table>
-        </div>
+        <b-tabs content-class="mt-3">
+          <b-tab title="First" active>
+            <div v-if="headings.length > 0">
+              <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
+            </div>
+          </b-tab>
+          <b-tab title="Second">
+            <p>I'm the second tab</p>
+          </b-tab>
+        </b-tabs>
       </div>
     </div>
   </div>
@@ -31,7 +38,6 @@ import {
   PageTables
 } from "@kobataku/pdf-table-extractor";
 import { pdfDataFromFile, RoutePath } from "../main2";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 @Component({})
 export default class SelectPDF extends Vue {
@@ -40,14 +46,22 @@ export default class SelectPDF extends Vue {
   get columns(): string[] {
     return this.headings.map((_, i) => `c${i}`);
   }
+  get displayColumns(): string[] {
+    return this.columns.filter(
+      (_, i) =>
+        //filterIdxに含まれていないインデックスのみの配列を作る
+        this.filterIdx.findIndex((_, ii) => i === ii) === -1
+    );
+  }
   records: { [key: string]: string }[] = [];
   headings: string[] = [];
+  /** フィルタ対象にするindex。ここに入れたインデックスの列は消す。 */
+  filterIdx: number[] = [];
   get options() {
     return {
       filterByColumn: true,
       headings: this.arrayToRecordObj(this.headings),
-      listColumns: this.listColumns,
-      columnsDropdown: true
+      listColumns: this.listColumns
     };
   }
   get listColumns() {
