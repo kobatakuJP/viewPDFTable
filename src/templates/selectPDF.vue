@@ -15,6 +15,11 @@
           </label>
         </div>
         <div v-if="headings.length > 0">
+          <CheckBoxGroup
+            :items="headings"
+            :selected="displayColumns"
+            @update-selected="updateSelected"
+          ></CheckBoxGroup>
           <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
         </div>
       </div>
@@ -31,29 +36,49 @@ import {
   PageTables
 } from "@kobataku/pdf-table-extractor";
 import { pdfDataFromFile, RoutePath } from "../main2";
+import CheckBoxGroup, {
+  CBItem
+} from "../presentational/molecules/CheckBoxGroup.vue";
 
-@Component({})
+/** ヘッダ用のデータ、CheckBoxコンポーネントのI/Fに合わせる */
+interface Heading extends CBItem {}
+
+@Component({ components: { CheckBoxGroup } })
 export default class SelectPDF extends Vue {
   readonly FILE_UPLOADER_ID = "file_upload";
   pdfData: Result;
+  /** 表示するレコード群 */
+  records: { [key: string]: string }[] = [];
+  /** ヘッダに使用するラベルの一覧 */
+  headings: Heading[] = [];
+  /** 表示対象ID群 */
+  displayColumnIDs: string[] = [];
+  /** すべてのカラムのID */
   get columns(): string[] {
-    return this.headings.map((_, i) => `c${i}`);
+    return this.headings.map(v => v.value);
   }
+  /** 表示するカラムのID */
   get displayColumns(): string[] {
     return this.columns.filter(
-      (_, i) =>
-        //filterIdxに含まれていないインデックスのみの配列を作る
-        this.filterIdx.findIndex(v => i === v) === -1
+      v => this.displayColumnIDs.findIndex(id => v === id) > -1
     );
   }
-  records: { [key: string]: string }[] = [];
-  headings: string[] = [];
-  /** フィルタ対象にするindex。ここに入れたインデックスの列は消す。 */
-  filterIdx: number[] = [];
+  updateSelected(selected: string[]) {
+    this.displayColumnIDs.splice(0, this.displayColumnIDs.length, ...selected);
+  }
+  /** ヘッダをテーブル用のオブジェクトに変換 */
+  get headingsTableObj(): { [id: string]: string } {
+    const result = {};
+    for (let i = 0, l = this.headings.length; i < l; i++) {
+      result[this.headings[i].value] = this.headings[i].text;
+    }
+    return result;
+  }
+  /** vue-table-2に渡すoptions */
   get options() {
     return {
       filterByColumn: true,
-      headings: this.arrayToRecordObj(this.headings),
+      headings: this.headingsTableObj,
       listColumns: this.listColumns
     };
   }
@@ -81,6 +106,7 @@ export default class SelectPDF extends Vue {
   resetTable() {
     this.headings.splice(0);
     this.records.splice(0);
+    this.displayColumnIDs.splice(0);
   }
   updateTable() {
     this.updateColumns();
@@ -90,15 +116,22 @@ export default class SelectPDF extends Vue {
   private updateColumns() {
     if (this.isTableData()) {
       // データ在りの場合はヘッダを更新
-      const header = this.choiseHeader();
-      this.headings.splice(0, this.headings.length, ...header);
+      const header = this.createHeaderLabels();
+      this.headings.splice(
+        0,
+        this.headings.length,
+        ...header.map((v, i) => {
+          return { value: `c${i}`, text: v };
+        })
+      );
+      this.displayColumnIDs = this.columns.slice();
     } else {
       // データなしの場合は何もなし
-      this.headings.splice(0);
+      this.resetTable();
     }
   }
-  /** ヘッダを選択する */
-  private choiseHeader(): string[] {
+  /** ヘッダを作成する */
+  private createHeaderLabels(): string[] {
     const tables = this.objToArray(this.pdfData.pageTables[0].tables);
     let result = this.objToArray(tables[0]); // 見つからない場合は最初を返しとくため
     /** ヘッダじゃないのに上にあるデータは消すので、その数を数えておく */
@@ -134,7 +167,7 @@ export default class SelectPDF extends Vue {
   /** レコードを更新する */
   private updateRecords() {
     let table = this.getMargeTable();
-    table = this.removeDeprecateHeader(this.headings, table);
+    table = this.removeDeprecateHeader(this.headings.map(v => v.text), table);
     const recordsObj = table.map(v => this.arrayToRecordObj(v));
     this.records.splice(0, this.records.length, ...recordsObj);
   }
