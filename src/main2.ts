@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import { ClientTable } from 'vue-tables-2';
+import App from "./pages/App.vue";
 import NotFound from "./templates/404.vue";
-import App from "./templates/App.vue";
 import SelectPDF from "./templates/selectPDF.vue";
 
 /** urlのパスにあたる文言 */
@@ -45,7 +45,7 @@ function init() {
     const app = new Vue({
         el: "#app",
         router: router,
-        render: (h) => h(App)
+        render: h => h(App)
     })
 }
 
