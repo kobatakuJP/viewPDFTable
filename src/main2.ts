@@ -3,9 +3,11 @@ import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Vue from "vue";
+import { DrawerLayout } from 'vue-drawer-layout';
 import VueRouter, { RouteConfig } from "vue-router";
 import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
+import MainPage from "./pages/MainPage.vue";
 import NotFound from "./templates/404.vue";
 import SelectPDF from "./templates/selectPDF.vue";
 
@@ -19,7 +21,8 @@ export enum RoutePath {
 
 Vue.use(VueRouter);
 Vue.use(ClientTable);
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
+Vue.component(DrawerLayout.name, DrawerLayout)
 
 window.onload = init;
 
@@ -36,7 +39,7 @@ function init() {
 
     /** コンポーネントのルートを設定 */
     const routes: RouteConfig[] = [
-        { path: RoutePath.ROOT, component: SelectPDF },
+        { path: RoutePath.ROOT, component: MainPage },
         { path: RoutePath.SELECT, component: SelectPDF },
         // { path: RoutePath.RESULT, component: ResultComponent },
         { path: RoutePath.NOTFOUND, component: NotFound },
