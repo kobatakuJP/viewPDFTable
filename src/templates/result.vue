@@ -1,5 +1,7 @@
 <template>
-  <div>result</div>
+  <div>
+    <v-client-table :columns="columns" :data="records" :options="options"></v-client-table>
+  </div>
 </template>
 
 <script lang="ts">

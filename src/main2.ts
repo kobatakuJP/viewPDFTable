@@ -2,9 +2,11 @@ import { pdf_table_extractor_from_path, Result } from "@kobataku/pdf-table-extra
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import Vue from "vue";
 import { DrawerLayout } from 'vue-drawer-layout';
 import VueRouter, { RouteConfig } from "vue-router";
+import VueSweetalert2 from 'vue-sweetalert2';
 import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
 import MainPage from "./pages/MainPage.vue";
@@ -23,6 +25,7 @@ Vue.use(VueRouter);
 Vue.use(ClientTable);
 Vue.use(BootstrapVue);
 Vue.component(DrawerLayout.name, DrawerLayout)
+Vue.use(VueSweetalert2);
 
 window.onload = init;
 
