@@ -6,11 +6,11 @@
           <label :for="FILE_UPLOADER_ID">
             端末からPDFを選ぶ
             <input
+              class="dummy-input"
               type="file"
               :id="FILE_UPLOADER_ID"
               accept="application/pdf"
               @change="updateFile"
-              style="width:0;"
             />
           </label>
         </div>
@@ -222,4 +222,10 @@ export default class SelectPDF extends Vue {
 </script>
 
 <style scoped>
+/** inputを見せなくする */
+.dummy-input {
+  visibility: hidden;
+  position: absolute;
+  top: -200px;
+}
 </style>
