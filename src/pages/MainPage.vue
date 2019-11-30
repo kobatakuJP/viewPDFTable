@@ -6,7 +6,7 @@
         <drawer-menu></drawer-menu>
       </div>
       <div slot="content">
-        <SelectPDF></SelectPDF>
+        <DataTable></DataTable>
       </div>
     </vue-drawer-layout>
   </div>
@@ -15,10 +15,10 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import SelectPDF from "../templates/selectPDF.vue";
+import DataTable from "../templates/DataTable.vue";
 import DrawerMenu from "../templates/DrawerMenu.vue";
 
-@Component({ components: { DrawerMenu, SelectPDF } })
+@Component({ components: { DrawerMenu, DataTable } })
 export default class MainPage extends Vue {
   handleMaskClick() {
     (this.$refs.drawer as any).toggle(false);

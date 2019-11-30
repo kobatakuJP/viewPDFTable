@@ -44,7 +44,7 @@ import CheckBoxGroup, {
 interface Heading extends CBItem {}
 
 @Component({ components: { CheckBoxGroup } })
-export default class SelectPDF extends Vue {
+export default class DataTable extends Vue {
   readonly FILE_UPLOADER_ID = "file_upload";
   pdfData: Result;
   /** 表示するレコード群 */

@@ -11,7 +11,7 @@ import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
 import MainPage from "./pages/MainPage.vue";
 import NotFound from "./templates/404.vue";
-import SelectPDF from "./templates/selectPDF.vue";
+import DataTable from "./templates/DataTable.vue";
 
 /** urlのパスにあたる文言 */
 export enum RoutePath {
@@ -43,7 +43,7 @@ function init() {
     /** コンポーネントのルートを設定 */
     const routes: RouteConfig[] = [
         { path: RoutePath.ROOT, component: MainPage },
-        { path: RoutePath.SELECT, component: SelectPDF },
+        { path: RoutePath.SELECT, component: DataTable },
         // { path: RoutePath.RESULT, component: ResultComponent },
         { path: RoutePath.NOTFOUND, component: NotFound },
     ]
