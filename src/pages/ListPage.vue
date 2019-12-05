@@ -6,7 +6,7 @@
         <drawer-menu></drawer-menu>
       </div>
       <div slot="content">
-        <DataTable></DataTable>
+        <DataTable :pdffile="pdffile"></DataTable>
       </div>
     </vue-drawer-layout>
   </div>
@@ -14,12 +14,16 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
 import DataTable from "../templates/DataTable.vue";
 import DrawerMenu from "../templates/DrawerMenu.vue";
 
-@Component({ components: { DrawerMenu, DataTable } })
+@Component({
+  components: { DrawerMenu, DataTable }
+})
 export default class ListPage extends Vue {
+  @Prop({ default: null })
+  pdffile: File;
   handleMaskClick() {
     (this.$refs.drawer as any).toggle(false);
   }
@@ -27,7 +31,7 @@ export default class ListPage extends Vue {
 </script>
 
 <style>
-.vpt-theme {
+.theme-normal {
   background-color: #f5f0e3;
   color: #f0134d;
 }

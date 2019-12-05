@@ -2,18 +2,6 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="vpt-theme">
-          <label :for="FILE_UPLOADER_ID">
-            端末からPDFを選ぶ
-            <input
-              class="dummy-input"
-              type="file"
-              :id="FILE_UPLOADER_ID"
-              accept="application/pdf"
-              @change="updateFile"
-            />
-          </label>
-        </div>
         <div v-if="headings.length > 0">
           <CheckBoxGroup
             :items="headings"
@@ -29,7 +17,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop } from "vue-property-decorator";
 import {
   pdf_table_extractor_from_path,
   Result,
@@ -43,8 +31,15 @@ import CheckBoxGroup, {
 /** ヘッダ用のデータ、CheckBoxコンポーネントのI/Fに合わせる */
 interface Heading extends CBItem {}
 
-@Component({ components: { CheckBoxGroup } })
+@Component({
+  components: { CheckBoxGroup }
+})
 export default class DataTable extends Vue {
+  mounted() {
+    this.updateFile(this.pdffile);
+  }
+  @Prop({ default: null })
+  pdffile: File;
   readonly FILE_UPLOADER_ID = "file_upload";
   pdfData: Result;
   /** 表示するレコード群 */
@@ -95,12 +90,9 @@ export default class DataTable extends Vue {
     }
     return result;
   }
-  async updateFile(e: Event) {
+  async updateFile(pdffile: File) {
     this.resetTable();
-    const file = (document.getElementById(
-      this.FILE_UPLOADER_ID
-    ) as HTMLInputElement).files[0];
-    this.pdfData = await pdfDataFromFile(file);
+    this.pdfData = await pdfDataFromFile(pdffile);
     this.updateTable();
   }
   resetTable() {

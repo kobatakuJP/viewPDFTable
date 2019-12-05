@@ -9,9 +9,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import VueSweetalert2 from 'vue-sweetalert2';
 import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
-import ListPage from "./pages/ListPage.vue";
-import NotFound from "./templates/404.vue";
-import DataTable from "./templates/DataTable.vue";
 
 /** urlのパスにあたる文言 */
 export enum RoutePath {
@@ -39,18 +36,8 @@ function init() {
     document.body.appendChild(appbase);
 
     // 以下Vueコンポーネントの初期化
-
-    /** コンポーネントのルートを設定 */
-    const routes: RouteConfig[] = [
-        { path: RoutePath.ROOT, component: ListPage },
-        { path: RoutePath.SELECT, component: DataTable },
-        // { path: RoutePath.RESULT, component: ResultComponent },
-        { path: RoutePath.NOTFOUND, component: NotFound },
-    ]
-    const router = new VueRouter({ routes });
     const app = new Vue({
         el: "#app",
-        router: router,
         render: h => h(App)
     })
 }
