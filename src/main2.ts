@@ -5,20 +5,10 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Vue from "vue";
 import { DrawerLayout } from 'vue-drawer-layout';
-import VueRouter, { RouteConfig } from "vue-router";
 import VueSweetalert2 from 'vue-sweetalert2';
 import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
 
-/** urlのパスにあたる文言 */
-export enum RoutePath {
-    ROOT = "/",
-    SELECT = "/select",
-    RESULT = "/result",
-    NOTFOUND = "/*"
-}
-
-Vue.use(VueRouter);
 Vue.use(ClientTable);
 Vue.use(BootstrapVue);
 Vue.component(DrawerLayout.name, DrawerLayout)

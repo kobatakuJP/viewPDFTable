@@ -14,7 +14,7 @@ import {
   Result,
   PageTables
 } from "@kobataku/pdf-table-extractor";
-import { pdfDataFromFile, RoutePath } from "../main2";
+import { pdfDataFromFile } from "../main2";
 import CheckBoxGroup, {
   CBItem
 } from "../presentational/molecules/CheckBoxGroup.vue";
