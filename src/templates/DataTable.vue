@@ -34,9 +34,12 @@ export default class DataTable extends Vue {
   pdffile: File;
   @Watch("pdffile")
   private async updateFile() {
+    this.$swal({ title: "処理中" });
+    (this.$swal as any).showLoading();
     this.resetTable();
     this.pdfData = await pdfDataFromFile(this.pdffile);
     this.updateTable();
+    (this.$swal as any).close();
   }
   @Prop({ default: [] })
   selectedID: string[];
