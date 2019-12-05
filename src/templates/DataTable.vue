@@ -3,11 +3,6 @@
     <div class="row">
       <div class="col-md-12">
         <div v-if="headings.length > 0">
-          <CheckBoxGroup
-            :items="headings"
-            :selected="displayColumns"
-            @update-selected="updateSelected"
-          ></CheckBoxGroup>
           <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
         </div>
       </div>
@@ -17,7 +12,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import {
   pdf_table_extractor_from_path,
   Result,
@@ -29,23 +24,34 @@ import CheckBoxGroup, {
 } from "../presentational/molecules/CheckBoxGroup.vue";
 
 /** ヘッダ用のデータ、CheckBoxコンポーネントのI/Fに合わせる */
-interface Heading extends CBItem {}
+export interface Heading extends CBItem {}
 
 @Component({
   components: { CheckBoxGroup }
 })
+/** PDFをパースし、表にして表示する。 */
 export default class DataTable extends Vue {
   mounted() {
     this.updateFile(this.pdffile);
   }
   @Prop({ default: null })
   pdffile: File;
-  readonly FILE_UPLOADER_ID = "file_upload";
+  @Prop({ default: [] })
+  selectedID: string[];
+  @Watch("selectedID")
+  onSelectedIDChanged(newID: string[], oldID: string[]) {
+    this.displayColumnIDs.splice(0, this.displayColumnIDs.length, ...newID);
+  }
+  /** ヘッダに使用するラベルの一覧 */
+  headings: Heading[] = [];
+  @Watch("headings")
+  onHeadingsChanged(newID: string[], oldID: string[]) {
+    // リストの内容が変更されたら上位に通知する
+    this.$emit("list-updated", this.headings);
+  }
   pdfData: Result;
   /** 表示するレコード群 */
   records: { [key: string]: string }[] = [];
-  /** ヘッダに使用するラベルの一覧 */
-  headings: Heading[] = [];
   /** 表示対象ID群 */
   displayColumnIDs: string[] = [];
   /** すべてのカラムのID */
@@ -57,9 +63,6 @@ export default class DataTable extends Vue {
     return this.columns.filter(
       v => this.displayColumnIDs.findIndex(id => v === id) > -1
     );
-  }
-  updateSelected(selected: string[]) {
-    this.displayColumnIDs.splice(0, this.displayColumnIDs.length, ...selected);
   }
   /** ヘッダをテーブル用のオブジェクトに変換 */
   get headingsTableObj(): { [id: string]: string } {
@@ -90,17 +93,17 @@ export default class DataTable extends Vue {
     }
     return result;
   }
-  async updateFile(pdffile: File) {
+  private async updateFile(pdffile: File) {
     this.resetTable();
     this.pdfData = await pdfDataFromFile(pdffile);
     this.updateTable();
   }
-  resetTable() {
+  private resetTable() {
     this.headings.splice(0);
     this.records.splice(0);
     this.displayColumnIDs.splice(0);
   }
-  updateTable() {
+  private updateTable() {
     this.updateColumns();
     this.updateRecords();
   }
@@ -214,10 +217,4 @@ export default class DataTable extends Vue {
 </script>
 
 <style scoped>
-/** inputを見せなくする */
-.dummy-input {
-  visibility: hidden;
-  position: absolute;
-  top: -200px;
-}
 </style>

@@ -25,27 +25,28 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Component from "vue-class-component";
+import { Component, Prop, Watch } from "vue-property-decorator";
 
 export interface CBItem {
   value: string;
   text: string;
 }
 
-@Component({
-  props: {
-    items: Array,
-    selected: Array
-  }
-})
+@Component({})
 export default class CheckBoxGroup extends Vue {
   // 参考：https://bootstrap-vue.js.org/docs/components/form-checkbox/#indeterminate-tri-state-support
-  items: CBItem[];
-  selected: string[];
   mySelected: string[] = [];
-  created() {
-    this.mySelected.splice(0, this.mySelected.length, ...this.selected);
-    this.$watch("mySelected", this.updated);
+  @Prop({ default: [] })
+  items: CBItem[];
+  @Prop({ default: [] })
+  defaultSelected: string[];
+  @Watch("defaultSelected")
+  updateDefaultSelected() {
+    this.mySelected.splice(0, this.mySelected.length, ...this.defaultSelected);
+  }
+  @Watch("mySelected")
+  updateMySelected() {
+    this.$emit("update-selected", this.mySelected);
   }
   get allSelected(): boolean {
     return this.items.length === this.mySelected.length;
@@ -55,9 +56,6 @@ export default class CheckBoxGroup extends Vue {
   }
   toggleAll(checked) {
     this.mySelected = checked ? this.items.slice().map(v => v.value) : [];
-  }
-  updated() {
-    this.$emit("update-selected", this.mySelected);
   }
 }
 </script>
