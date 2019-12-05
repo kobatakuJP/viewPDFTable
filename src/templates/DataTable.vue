@@ -1,11 +1,7 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div v-if="headings.length > 0">
-          <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
-        </div>
-      </div>
+  <div>
+    <div v-if="headings.length > 0" class="table-container">
+      <v-client-table :columns="displayColumns" :data="records" :options="options"></v-client-table>
     </div>
   </div>
 </template>
@@ -32,10 +28,16 @@ export interface Heading extends CBItem {}
 /** PDFをパースし、表にして表示する。 */
 export default class DataTable extends Vue {
   mounted() {
-    this.updateFile(this.pdffile);
+    this.updateFile();
   }
   @Prop({ default: null })
   pdffile: File;
+  @Watch("pdffile")
+  private async updateFile() {
+    this.resetTable();
+    this.pdfData = await pdfDataFromFile(this.pdffile);
+    this.updateTable();
+  }
   @Prop({ default: [] })
   selectedID: string[];
   @Watch("selectedID")
@@ -92,11 +94,6 @@ export default class DataTable extends Vue {
       });
     }
     return result;
-  }
-  private async updateFile(pdffile: File) {
-    this.resetTable();
-    this.pdfData = await pdfDataFromFile(pdffile);
-    this.updateTable();
   }
   private resetTable() {
     this.headings.splice(0);
@@ -217,4 +214,7 @@ export default class DataTable extends Vue {
 </script>
 
 <style scoped>
+.table-container {
+  margin: 20px;
+}
 </style>
