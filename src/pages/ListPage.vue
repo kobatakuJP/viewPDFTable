@@ -19,7 +19,7 @@ import DataTable from "../templates/DataTable.vue";
 import DrawerMenu from "../templates/DrawerMenu.vue";
 
 @Component({ components: { DrawerMenu, DataTable } })
-export default class MainPage extends Vue {
+export default class ListPage extends Vue {
   handleMaskClick() {
     (this.$refs.drawer as any).toggle(false);
   }

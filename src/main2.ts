@@ -9,7 +9,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import VueSweetalert2 from 'vue-sweetalert2';
 import { ClientTable } from 'vue-tables-2';
 import App from "./pages/App.vue";
-import MainPage from "./pages/MainPage.vue";
+import ListPage from "./pages/ListPage.vue";
 import NotFound from "./templates/404.vue";
 import DataTable from "./templates/DataTable.vue";
 
@@ -42,7 +42,7 @@ function init() {
 
     /** コンポーネントのルートを設定 */
     const routes: RouteConfig[] = [
-        { path: RoutePath.ROOT, component: MainPage },
+        { path: RoutePath.ROOT, component: ListPage },
         { path: RoutePath.SELECT, component: DataTable },
         // { path: RoutePath.RESULT, component: ResultComponent },
         { path: RoutePath.NOTFOUND, component: NotFound },
