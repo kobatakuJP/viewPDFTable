@@ -1,17 +1,7 @@
 
 <template>
   <div class="content-center">
-    <label :for="FILE_UPLOADER_ID" class="btn-circle-3d theme-button">
-      ファイル選択
-      <!-- <input
-        class="dummy-input"
-        type="file"
-        :id="FILE_UPLOADER_ID"
-        accept="application/pdf"
-        @change="selectFile"
-      />-->
-      <pdf-selector :id="FILE_UPLOADER_ID" @selected-pdf="selectFile" />
-    </label>
+    <label :for="FILE_UPLOADER_ID" class="btn-circle-3d theme-button">ファイル選択</label>
   </div>
 </template>
 
@@ -19,17 +9,12 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import PdfSelector from "../presentational/molecules/PdfSelector.vue";
+import { FILE_UPLOADER_ID } from "./App.vue";
 
 @Component({ components: { PdfSelector } })
 /** PDFが選択されていないときのページ */
 export default class UnselectedPage extends Vue {
-  readonly FILE_UPLOADER_ID = "file_upload";
-  async selectFile(e: Event) {
-    const file = (document.getElementById(
-      this.FILE_UPLOADER_ID
-    ) as HTMLInputElement).files[0];
-    this.$emit("selected", file);
-  }
+  readonly FILE_UPLOADER_ID = FILE_UPLOADER_ID;
 }
 </script>
 

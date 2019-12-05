@@ -6,9 +6,10 @@
         <list-page :pdffile="pdffile" />
       </div>
       <div v-else class="height100">
-        <unselected-page @selected="changeFile" />
+        <unselected-page />
       </div>
     </transition>
+    <pdf-selector :id="FILE_UPLOADER_ID" @selected-pdf="changeFile" />
   </div>
 </template>
 
@@ -17,10 +18,14 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import UnselectedPage from "./UnselectedPage.vue";
 import ListPage from "./ListPage.vue";
+import PdfSelector from "../presentational/molecules/PdfSelector.vue";
 
-@Component({ components: { UnselectedPage, ListPage } })
-/** アプリケーションを表示するためのrouter-viewを置くためだけの人生 */
+export const FILE_UPLOADER_ID = "file_upload";
+
+@Component({ components: { UnselectedPage, ListPage, PdfSelector } })
+/** 本アプリケーションのトップ。表示内容の切り替えなどをやる */
 export default class App extends Vue {
+  readonly FILE_UPLOADER_ID = FILE_UPLOADER_ID;
   pdffile: File = null;
   changeFile(f: File) {
     this.pdffile = f;
@@ -45,7 +50,6 @@ body {
 }
 .theme-normal {
   background-color: #f5f0e3;
-  color: #ff6f5e;
 }
 .theme-button {
   background-color: #f0134d;

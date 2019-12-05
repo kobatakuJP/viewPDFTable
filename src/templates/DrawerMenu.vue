@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div class="back">
     <b-list-group>
       <b-list-group-item button v-b-toggle.collapse-1>列チョイス</b-list-group-item>
       <b-collapse id="collapse-1" class="mt-2">
@@ -9,7 +9,10 @@
           @update-selected="updateSelected"
         />
       </b-collapse>
-      <b-list-group-item button>別ファイル選択</b-list-group-item>
+      <b-list-group-item button @click="click">
+        別ファイル選択
+        <label :for="FILE_UPLOADER_ID" ref="selectPdf"></label>
+      </b-list-group-item>
     </b-list-group>
   </div>
 </template>
@@ -19,9 +22,11 @@ import Vue from "vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 import CheckBoxGroup from "../presentational/molecules/CheckBoxGroup.vue";
 import { Heading } from "./DataTable.vue";
+import { FILE_UPLOADER_ID } from "../pages/App.vue";
 
 @Component({ components: { CheckBoxGroup } })
 export default class DrawerMenu extends Vue {
+  readonly FILE_UPLOADER_ID = FILE_UPLOADER_ID;
   @Prop({ default: [] })
   defaultSelectedId: string[];
   @Prop({ default: [] })
@@ -30,17 +35,18 @@ export default class DrawerMenu extends Vue {
     this.$emit("update-selected", selected);
   }
   click(e) {
-    this.$swal({
-      titleText: "Hi",
-      html: "<div><NotFound/>aa</div>"
-    });
+    // this.$swal({
+    //   titleText: "Hi",
+    //   html: "<div><NotFound/>aa</div>"
+    // });
+    (this.$refs.selectPdf as HTMLElement).click();
   }
 }
 </script>
 
 <style scoped>
 .back {
-  background-color: aqua;
+  background-color: rgba(255,255,255,0.7);
   height: 100%;
 }
 </style>

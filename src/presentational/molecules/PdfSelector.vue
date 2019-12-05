@@ -1,7 +1,14 @@
 
 <template>
   <div>
-    <input class="dummy-input" type="file" :id="id" accept="application/pdf" @change="selectFile" />
+    <input
+      class="dummy-input"
+      type="file"
+      :id="id"
+      ref="inputArea"
+      accept="application/pdf"
+      @change="selectFile"
+    />
   </div>
 </template>
 
@@ -14,8 +21,9 @@ import { Component, Prop } from "vue-property-decorator";
 export default class PdfSelector extends Vue {
   @Prop({ default: "" })
   id: string;
-  selectFile(f: File) {
-    this.$emit("selected-pdf", f);
+  selectFile(e: Event) {
+    const file = (this.$refs.inputArea as HTMLInputElement).files[0];
+    if (file) this.$emit("selected-pdf", file);
   }
 }
 </script>
