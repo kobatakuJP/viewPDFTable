@@ -1,15 +1,20 @@
 
 <template>
   <div>
-    <vue-drawer-layout ref="drawer" :drawer-width="400" @mask-click="handleMaskClick">
-      <div class="drawer-content" slot="drawer">
+    <vue-drawer-layout
+      ref="drawer"
+      :drawer-width="400"
+      @mask-click="handleMaskClick"
+      :backdrop="true"
+    >
+      <div class="drawer-content main-content" slot="drawer">
         <drawer-menu
           :columns="columns"
           :default-selected-id="allClumnsId"
           @update-selected="updateSelected"
         />
       </div>
-      <div slot="content">
+      <div slot="content" class="main-content">
         <data-table :pdffile="pdffile" :selectedID="selectedID" @list-updated="listUpdated" />
       </div>
     </vue-drawer-layout>
@@ -47,9 +52,10 @@ export default class ListPage extends Vue {
 }
 </script>
 
-<style>
-.theme-normal {
-  background-color: #f5f0e3;
-  color: #f0134d;
+<style scoped>
+.main-content {
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 </style>
